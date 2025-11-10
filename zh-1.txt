@@ -1,0 +1,83 @@
+#!/bin/bash
+
+while true; do
+    echo "Valasszon (1-4):"
+    echo "1) Szamok atlaga (fajlbol)"
+    echo "2) Uj szam hozzaadasa (konzolrol)"
+    echo "3) Inditasi argumentumok osztalyzasa"
+    echo "4) Kilepes"
+    read -p "Opcio (1-4): " OP
+
+    if [ "$OP" -eq 4 ]; then
+        echo "Kilepes..."
+        break
+    fi
+
+    if [ "$OP" -lt 1 ] || [ "$OP" -gt 3 ]; then
+        echo "Ervenytelen opcio, probalja ujra."
+        echo ""
+        continue
+    fi
+
+
+    case $OP in
+        1)
+            echo "1) Szamok atlaga (fajlbol)" ;
+
+            SUM=0
+            DB=0
+            AVG=0
+
+            while read -r NUM; do
+                SUM=$(echo "$SUM + $NUM" | bc)
+                DB=$((DB + 1))
+            done < szamok.txt
+
+            AVG=$(echo "scale=2; $SUM / $DB" | bc)
+            echo "A szamok atlaga: $AVG"
+            read -p "Nyomj entert a folytatashoz..." ;;
+
+        2)
+            echo "2) Uj szam hozzaadasa (konzolrol)" ;
+
+            read -p "Adjon meg egy uj szamot (1-5): " NEW
+            echo "$NEW" >> szamok.txt
+            echo "Az ertek hozzaadva."
+            read -p "Nyomj entert a folytatashoz..." ;;
+
+        3)
+
+            echo "3) Inditasi argumentumok osztalyzasa" ;
+
+            SUMTWO=0
+
+            if [ $# -ne 2 ]; then
+                echo "Hiba: Ehhez a funkciohoz a scriptet pontosan ket szammal kell inditani!"
+            else
+   
+                SUMTWO=$(( $1 + $2 ))
+
+   
+                if [ $SUMTWO -le 2 ]; then
+                    JEGY="Egyes"
+                elif [ $SUMTWO -le 4 ]; then
+                    JEGY="Kettes"
+                elif [ $SUMTWO -le 6 ]; then
+                    JEGY="Harmas"
+                elif [ $SUMTWO -le 8 ]; then
+                    JEGY="Negyes"
+                else
+                    JEGY="Otos"
+                fi
+                
+                echo "A kapott szamok ($1 es $2) osszege: $SUMTWO"
+                echo "Erdemjegy: $JEGY"
+            fi
+
+            read -p "Nyomj entert a folytatashoz..." ;;
+
+        *)
+            echo "Ervenytelen opcio, probalja ujra." ;;
+
+    esac
+done

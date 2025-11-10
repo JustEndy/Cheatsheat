@@ -1,0 +1,78 @@
+#!/bin/bash
+
+#Egyszerű menü alapú számológép + - / *
+#Kilépés után olvassunk fájlból és adjuk össze a benne lévő számokat
+#Majd ugyan ezt a parancssori argumentumokkal is.
+
+while true; do
+    echo "Válasszon egy műveletet:"
+    echo "1) Összeadás (+)"
+    echo "2) Kivonás (-)"
+    echo "3) Szorzás (*)"
+    echo "4) Osztás (/)"
+    echo "5) Kilépés"
+    read -p "Opció (1-5): " OP
+
+    if [ "$OP" -eq 5 ]; then
+        echo "Kilépés..."
+        break
+    fi
+
+    #op not in 1-4
+    if [ "$OP" -lt 1 ] || [ "$OP" -gt 4 ]; then
+        echo "Érvénytelen opció, próbálja újra."
+        echo ""
+        continue
+    fi
+
+
+    read -p "Adja meg az első számot: " SZAM1
+    read -p "Adja meg a második számot: " SZAM2
+
+    case $OP in
+        1)
+            EREDMENY=$(($SZAM1 + $SZAM2))
+            echo "Eredmény: $SZAM1 + $SZAM2 = $EREDMENY"
+            ;;
+        2)
+            EREDMENY=$(($SZAM1 - $SZAM2))
+            echo "Eredmény: $SZAM1 - $SZAM2 = $EREDMENY"
+            ;;
+        3)
+            EREDMENY=$(($SZAM1 * $SZAM2))
+            echo "Eredmény: $SZAM1 * $SZAM2 = $EREDMENY"
+            ;;
+        4)
+            if [ "$SZAM2" -eq 0 ]; then
+                echo "Hiba: Nullával való osztás nem lehetséges!"
+            else
+                EREDMENY=$(($SZAM1 / $SZAM2))
+                echo "Eredmény: $SZAM1 / $SZAM2 = $EREDMENY"
+            fi
+            ;;
+        *)
+            echo "Érvénytelen opció, próbálja újra."
+            ;;
+    esac
+    echo ""
+done
+
+#Kilépés után fájl olvasása és számok összeadása
+
+#FÁJL GENERÁLÁS, NEM RÉSZE A MINTAZHNAK!
+echo -e "10\n20\n30\n40\n50" > szamok
+#FÁJL GENERÁLÁS, NEM RÉSZE A MINTAZHNAK!
+
+OSSZEG=0
+while read SZAM; do
+    OSSZEG=$(($OSSZEG + $SZAM))
+done < szamok
+
+echo "A fájlban lévő számok összege: $OSSZEG"
+
+#Argumentumok feldolgozása és összeadás
+ARG_OSSZEG=0
+for ARG in "$@"; do
+    ARG_OSSZEG=$(($ARG_OSSZEG + ARG))
+done
+echo "A parancssori argumentumok összege: $ARG_OSSZEG"

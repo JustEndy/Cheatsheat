@@ -1,0 +1,230 @@
+#!/bin/bash
+#Ez a tutorial www.w3school.com/bash/ -re alapul
+
+#scrit tuttatása:
+# ./tutorial.sh
+
+# ha nincs futtatható jog a fájlon(alapértelmezetten nincs) akkor:
+# chmod +x tutorial.sh
+# majd újra futtatás
+
+#vagy
+# bash tutorial.sh
+
+# <- Komment használata
+#! <- shebang(#!) karater, megmondja, hogy a script fájlunkat melyik futtató futtasa(amit mi fogunk használni !#/bin/bash ) pl: (/bin/python /../ghci stb)
+#Követelmény, hogy ez az első sorban jelenjen meg. 
+# A Script futása sorrol sorra halad, tehát soronként egymás alá írt parancsok egymás után futnak le. pl:
+echo "Elso" 
+echo "Masodik"
+
+# ; karakterrel több parancsot tudunk futtatni egy sorba egymás után
+echo "A mondat első fele"; echo " és a másik"
+
+
+#" " | ' ' | ` ` használata:
+# " " dupla idézőjel használatakor a változók feloldódnak, pl:                      ### A "változó fel van oldva" (vagy ki van értékelve) azt jelenti, hogy a shell (például Bash) a változó nevét (pl. $DARAB vagy ${DARAB}) lecseréli a változóban tárolt értékre a parancs végrehajtása előtt.
+echo "A változó értéke: $DARAB"
+# ' ' egyszeres idézőjel használatakor a változók nem oldódnak fel, pl:             ### Ha a változó nincs feloldva, a shell egyszerűen szövegként kezeli a változó nevét, és nem helyettesíti be az értékét.
+echo 'A változó értéke: $DARAB'
+# ` ` backtick használatakor a benne lévő parancs végrehajtódik és a kimenete kerül beillesztésre, pl: 
+DATE=`date` 
+echo "A mai dátum: $DATE"
+
+
+#Változók:
+#változót bármely néven felvehetünk, érdemes angol nagybetűket használni, hogy ne keverjük össze őket parancsokkal
+#Változók lehetnek, szám, string, tömbök és dictionary/map-ek
+DARAB=10 #<- Fontos! szóköz sem az egyenlőségjel előtt sem mögött nem lehet!
+EVSZAK="Ősz"
+
+#Változókat "kiértékelni/feloldani" a $ karakterrel lehet alapesetben a futtató környezet nem tudja, hogy mit kezdjen vele, szövegként fogja kezelni
+echo DARAB #<- itt nincs feloldva a változó
+echo $DARAB #<- itt fel van oldva a változó
+echo "Most $EVSZAK Van"
+
+#Tömböket az adott módon lehet inicializálni:
+NEVEK=("Álmos" "Előd" "HUBA?")
+#Indexelni pedig:
+echo ${NEVEK[0]}
+echo ${NEVEK[1]}
+echo ${NEVEK[2]}
+echo ${NEVEK[3]} #<- túlindexelésnél üres string
+
+NEVEK[3]="Tündér Ilona"
+echo ${NEVEK[3]} #<- most már van értéke
+
+NEVEK+=("Király László") #<- új elem hozzáadása a tömbhöz
+echo ${NEVEK[4]}
+
+NEVEK[1]="Sándor" #<- elem módosítása
+echo ${NEVEK[1]}
+
+echo ${#NEVEK[@]} #<- tömb hossza
+
+
+#Szöveg összefűzése
+echo "${NEVEK[0]} barátja ${NEVEK[1]} vagy ${NEVEK[2]}"
+echo "$DARAB - $EVSZAK"
+BULI="Nagyon jó buli lesz ősszel"
+KINEL=", de ki jön el?"
+TELJES="$BULI$KINEL"
+echo $TELJES
+
+#Aritmetika két módon használható $(()) jelzéssel vagy expr parancs használatával
+A=10
+B=5
+OSSZEG=$(($A + $B))
+echo "Összeg: $OSSZEG"
+KULONBSEG=$(expr $A - $B)
+echo "Különbség: $KULONBSEG"
+
+#map/dictionary létrehozása asszociatív tömbként
+declare -A SZINEK
+SZINEK["piros"]="#FF0000"
+SZINEK["zold"]="#00FF00"
+
+echo "A piros szín kódja: ${SZINEK["piros"]}"
+echo "A zöld szín kódja: ${SZINEK["zold"]}"
+
+SZINEK["kek"]="#0000FF"
+echo "A kék szín kódja: ${SZINEK["kek"]}"
+
+#Változók törlése unset parancsal
+unset SZINEK["kek"]
+echo "A kék szín kódja törölve: ${SZINEK["kek"]}" #<- üres lesz mert törölve lett
+
+#Operátorok:
+#Aritmetikai operátorok: +, -, *, /, %
+#Összehasonlító operátorok: -eq (egyenlő
+#nem egyenlő: -ne
+#nagyobb mint: -gt
+#kisebb mint: -lt
+#nagyobb vagy egyenlő: -ge
+#kisebb vagy egyenlő: -le
+#Logikai operátorok: && (és), || (vagy), ! (nem)
+#Szöveg operátorok: = (egyenlő), != (nem egyenlő), < (kisebb mint), > (nagyobb mint), -z (üres string), -n (nem üres string), -? (létezik)
+#Fájl operátorok: -e (létezik), -f (fájl létezik), -d (könyvtár létezik), -r (olvasható), -w (írható), -x (futtatható)
+
+#Elágazások (itt is nagyon fontos a szóköz használata!):
+SZAM=7
+if [ $SZAM -gt 5 ]; then
+    echo "$SZAM nagyobb mint 5"
+elif [ $SZAM -eq 5 ]; then
+    echo "$SZAM egyenlő 5-tel"
+#szám osztható 5-tel
+elif [ $(($SZAM % 5)) -eq 0 ]; then
+    echo "$SZAM osztható 5-tel"
+else
+    echo "$SZAM kisebb mint 5"
+fi
+
+case $SZAM in
+    1)
+        echo "Szám egy"
+        ;;
+    2)
+        echo "Szám kettő"
+        ;;
+    3|4|5)
+        echo "Szám három, négy vagy öt"
+        ;;
+    *)
+        echo "Szám nagyobb mint öt vagy kisebb mint egy"
+        ;;
+esac
+
+#Ciklusok:
+#for ciklus
+for NEV in "${NEVEK[@]}"; do
+    echo "Név: $NEV"
+done
+
+for (( i=1; i<=5; i++ )); do
+    echo "Szám: $i"
+done
+
+for SZAM in 10 20 30 40 50; do
+    echo "Szám: $SZAM"
+done
+
+for SZAM in {1..5}; do
+    echo "Szám: $SZAM"
+done
+
+#while ciklus(először feltétel ellenőrzés, utána a ciklus mag)
+COUNT=1
+while [ $COUNT -le 5 ]; do
+    echo "Szám: $COUNT"
+    COUNT=$(($COUNT + 1))
+done
+
+
+#példa fájl generálás
+echo -e "Első sor\nMásodik sor\nHarmadik sor" > pel
+
+#fájl beolvasása soronként while ciklussal
+while read SOR; do
+    echo "Beolvasott sor: $SOR"
+done < pel
+
+
+
+#until ciklus(először a ciklus mag, utána feltétel ellenőrzés)
+COUNT=1
+until [ $COUNT -gt 5 ]; do
+    echo "Szám: $COUNT"
+    COUNT=$(($COUNT + 1))
+done
+
+#break és continue használata ciklusokban
+for (( i=1; i<=10; i++ )); do
+    if [ $i -eq 6 ]; then
+        break
+    fi
+    echo "Szám: $i"
+done
+
+for (( i=1; i<=10; i++ )); do
+    if [ $i -eq 6 ]; then
+        continue
+    fi
+    echo "Szám: $i"
+done
+
+#argumentumok kezelése script futtatásakor
+#./tutorial.sh arg1 arg2 
+#$0 - script neve
+#$1 - első argumentum
+#$2 - második argumentum
+
+echo "Script neve: $0"
+echo "Első argumentum: $1"
+echo "Második argumentum: $2"
+#összes argumentum: $@
+echo "Összes argumentum: $@"
+#argumentumok száma: $#
+echo "Argumentumok száma: $#"
+
+#argumentumok feldolgozása ciklussal
+for ARG in "$@"; do
+    echo "Argumentum: $ARG"
+done
+
+#Bekérdezés a felhasználótól
+read -p "Kérem adja meg a nevét: " FELHASZNALO #<- -p kapcsolóval megadhatunk egy prompt szöveget, a mondat végén egy szóközt is érdemes hagyni, a FELHASZNALO változóba kerül a beírt érték
+echo "Üdvözlöm, $FELHASZNALO!"
+
+#szám bekérése és összeadás
+read -p "Adjon meg egy számot: " SZAM1
+read -p "Adjon meg egy másik számot: " SZAM2
+OSSZEG=$(($SZAM1 + $SZAM2))
+echo "A két szám összege: $OSSZEG"
+
+
+
+
+
+
+
+

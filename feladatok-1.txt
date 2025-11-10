@@ -1,0 +1,27 @@
+# 1. feladat
+
+#Egy egyszerű menürendszer készítése bash-ben amely a következő opciókat tartalmazza:
+#1. Napló sor hozzáadása egy fájlhoz
+#2. Napló fájl megtekintése
+#3. Napló fájl törlése
+#4. Kilépés a menüből
+
+# 2. feladat
+# Egy egyszerű menürendszer készítése bash-ben amely a következő opciókat tartalmazza:
+# 1. Kör területének kiszámítása
+# 2. Kör kerületének kiszámítása
+# 3. Négyzet területének kiszámítása
+# 4. Négyzet kerületének kiszámítása
+# 5. Kilépés a menüből
+
+
+# 3. feladat
+# Egy argumentumban megadott fájlban lévő betűk gyakoriságának megszámlálálása és kiírása rendezett formában.
+
+# Ez a parancs létrehozza a példafájlt, ha nem létezik
+echo "Ez egy példa fájl. Ebben a fájlban különböző betűk gyakoriságát fogjuk megszámolni." > pelda.txt
+
+
+#4. feladat
+# Két argumentum egy téglalap oldalainak hossza. Írjon ki annyi csillagot (*) soronként, amennyi a téglalap A oldalának hossza, és annyi sort, amennyi a téglalap B oldalának hossza.
+# Második rész: Ugyan azt a feladatot oldja meg, de most a téglalap legyen üres (csak a kerete legyen csillagból).

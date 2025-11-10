@@ -1,0 +1,95 @@
+
+
+
+
+0. Lépés: A kiinduló fájl (szamok.txt) létrehozása
+
+Mielőtt elkezded a feladatokat, futtasd ezt az egyetlen parancsot a terminálodban. Ez létrehoz egy szamok.txt nevű fájlt, amely 10 darab, 1 és 5 közötti véletlen számot tartalmaz (minden szám külön sorban, ami megkönnyíti a feldolgozást).
+
+# Ez a parancs egy printf-et használ, amit egy subshell-ben futó 'for' ciklus táplál
+printf "%d\n" $(for i in $(seq 1 10); do echo $(($RANDOM % 5 + 1)); done) > szamok.txt
+
+Ellenőrizheted a tartalmát a cat szamok.txt paranccsal.
+
+
+
+Bash Feladatsor: Interaktív Menü
+
+A cél egyetlen Bash script (menu.sh) megírása, amely egy végtelen ciklusban futó menürendszert valósít meg, és kezeli a szamok.txt fájlt.
+
+1. Feladat: A Menürendszer és a Kilépés
+
+Készíts egy scriptet, ami egy végtelen ciklus segítségével folyamatosan felkínálja a felhasználónak a választható opciókat.
+
+
+A menünek a következőképpen kell kinéznie:
+
+--- Főmenü ---
+1. Számok átlaga (fájlból)
+2. Új szám hozzáadása (konzolról)
+3. Indítási argumentumok osztályzása
+4. Kilépés
+---------------
+Válasszon (1-4): 
+
+
+
+Olvasd be a felhasználó választását egy változóba.
+
+Használj case szerkezetet a választás kiértékelésére.
+
+A 4-es opció választásakor a scriptnek meg kell szakítania a végtelen ciklust.
+
+
+
+
+2. Feladat: 1. Opció (Átlagszámítás)
+
+Ha a felhasználó az '1'-et választja, a scriptnek végre kell hajtania a következőket:
+
+Olvassa be a szamok.txt fájl tartalmát.
+
+Számolja ki a fájlban lévő összes szám matematikai átlagát.
+
+Jelenítse meg az átlagot a képernyőn (pl. A számok átlaga: 3.4).
+
+Várjon a felhasználó enter lenyomására, mielőtt visszatér a főmenübe (pl. read -p "Nyomj entert a folytatáshoz...").
+
+
+
+
+
+3. Feladat: 2. Opció (Érték hozzáfűzése)
+
+Ha a felhasználó a '2'-t választja, a scriptnek:
+
+Be kell kérnie egy új számot a felhasználótól (pl. Adjon meg egy új számot (1-5):).
+
+Be kell olvasnia a választ.
+
+Az így beolvasott értéket hozzá kell fűznie (append) a szamok.txt fájl végéhez, új sorként.
+
+Ki kell írnia egy üzenetet a sikerességről (pl. Az érték hozzáadva.), majd várnia kell egy enterre a menübe való visszatérés előtt.
+
+4. Feladat: 3. Opció (Argumentumok osztályzása)
+
+Ez az opció a script indításakor megadott parancssori argumentumokkal dolgozik. A feladat feltételezi, hogy a scriptet két egész számmal indítjuk (pl. ./menu.sh 5 3).
+
+Ha a felhasználó a '3'-at választja:
+
+A scriptnek ellenőriznie kell, hogy pontosan két parancssori argumentumot ($#) kapott-e.
+
+Ha nem kettőt kapott: Írjon ki egy hibaüzenetet (pl. Hiba: Ehhez a funkcióhoz a scriptet pontosan két számmal kell indítani!).
+
+Ha pontosan kettőt kapott:
+a. Számolja ki a két argumentum ($1 és $2) összegét.
+b. Egy if-elif-else szerkezet segítségével határozza meg az "érdemjegyet" az összeg alapján:
+* 0-2: "Egyes"
+* 3-4: "Kettes"
+* 5-6: "Hármas"
+* 7-8: "Négyes"
+* 9 vagy több: "Ötös"
+c. Jelenítse meg az eredményt. Példa kimenet (ha a scriptet ./menu.sh 5 3 paranccsal indították):
+text A kapott számok (5 és 3) összege: 8 Érdemjegy: Négyes 
+
+Várjon egy enter lenyomására, mielőtt visszatér a főmenübe.
